@@ -1,18 +1,13 @@
-// package Website;
 public class WebPage {
      // Attributes
      private String pageUrl;
      private String title;
-     private String content;
-    //  private String[] links;
-     private boolean isSecure; // HTTPS or HTTP
+     private boolean isSecure; 
      private boolean isResponsive;
- 
      public WebPage(String pageUrl,String title,String content,boolean isSecure,boolean isResponsive)
      {
         this.pageUrl =pageUrl;
         this.title = title;
-        this.content = content;
         this.isSecure = isSecure;
         this.isResponsive = isResponsive;
      }
@@ -31,14 +26,6 @@ public class WebPage {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
     public boolean isSecure() {
         return isSecure;
     }
@@ -55,19 +42,6 @@ public class WebPage {
         isResponsive = responsive;
     }
     // functionalities of a webpage
-    public void searchContent(String content)
-    {
-        for(int i=0;i<content.length();i++)
-        {
-            if(content.equals(content))
-            {
-                System.out.println("Found your given content");
-            }
-            else{
-                System.out.println("Not found !");
-            }
-        }
-    }
     public void shareOnSocialMedia(String SocialPlatform)
     {
         System.out.println("Shared on "+SocialPlatform);

@@ -1,33 +1,39 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-public class Portfolio extends Website implements Runnable {
-    Scanner sc=new Scanner(System.in);
+
+public class Portfolio extends Website {
+    Scanner sc = new Scanner(System.in);
     private String contactEmail;
     private ArrayList<String> skills;
     private ArrayList<String> projects;
-    private WebLogin user;
+    private WebPage webPage; //  association
     private boolean isAdmin;
     private boolean isUserLogin;
-   
     public Portfolio(String Name, String contactEmail, String URL, String Description, String domainName,
-            String hostingServer, String dataBaseTechnology, boolean CMS,String creationDate,
-            String webServerTechnology, String FrontEndFramework, String FrontendLanguage, String BackEndLanguage,
-            String BackEndFramework, boolean IsWebsiteActive, String HostingProvider, String DomainRegistrar,
-            ArrayList<String> skills, ArrayList<String> projects) throws IOException {
+                     String hostingServer, String dataBaseTechnology, boolean CMS, String creationDate,
+                     String webServerTechnology, String FrontEndFramework, String FrontendLanguage,
+                     String BackEndLanguage, String BackEndFramework, boolean IsWebsiteActive, String HostingProvider,
+                     String DomainRegistrar, ArrayList<String> skills, ArrayList<String> projects) throws IOException {
         super(Name, URL, Description, domainName, dataBaseTechnology, CMS, creationDate, webServerTechnology,
                 FrontEndFramework, FrontendLanguage, BackEndLanguage, BackEndFramework, IsWebsiteActive, HostingProvider,
                 DomainRegistrar);
         this.contactEmail = contactEmail;
         this.skills = new ArrayList<>();
         this.projects = new ArrayList<>();
-        user = new WebLogin();
+        WebPage Home = new WebPage("https://www.AsfandDal.com/home", "Homepage",
+                "This is the HomePage of Asfand Dal Web portfolio, content here....", true, true);
+
+        WebPage contactMe = new WebPage("https:www.AsfandDal.com/contactMe", "Contact Me", "Contact to Asfand Dal", true, true);
+
+        WebPage AboutMe = new WebPage("https://www.AsfandDal.com/AboutMe", "About Us",
+                "Learn more about Asfand Dal, Software Engineer & public Speaker", true, true);
+        addWebPage(Home);
+        addWebPage(AboutMe);
+        addWebPage(contactMe);
+
+        
     }
 
     public void setContactEmail(String email) {
@@ -39,9 +45,9 @@ public class Portfolio extends Website implements Runnable {
     }
 
     public void addProject(String project) {
-        if (user.getIsAdmin()) {
+        if (login.getIsAdmin()) {
             projects.add(project);
-            System.out.println("project added successfully !");
+            System.out.println("Project added successfully !");
         } else {
             System.out.println("Only admin can add projects!");
         }
@@ -68,46 +74,47 @@ public class Portfolio extends Website implements Runnable {
         }
     }
 
-    public void DisplayProject() {
+    public void displayProjects() {
         for (int i = 0; i < projects.size(); i++) {
-            System.out.println(i+". "+projects.get(i));
+            System.out.println(i + ". " + projects.get(i));
         }
     }
 
     public void setSkills(String skill) {
-        if(user.getIsAdmin()){
+        if (login.getIsAdmin()) {
             skills.add(skill);
             System.out.println("Skill added successfully !");
-        }
-        else
+        } else {
             System.out.println("Only admin can set skills!");
+        }
     }
 
     public void displaySkills() {
-        for (int i = 0; i <skills.size(); i++) {
-            System.out.println((i+1)+". "+skills.get(i));
+        for (int i = 0; i < skills.size(); i++) {
+            System.out.println((i + 1) + ". " + skills.get(i));
         }
     }
 
-    public void ReadArticles() {
+    public void readArticles() {
         if (isUserLogin) {
             System.out.println("You can read articles");
-        }
-        else {
+        } else {
             System.out.println("Please login to read articles");
         }
     }
-    public void SignupUser() throws IOException {
+
+    public void signupUser() throws IOException {
         if (!isUserLogin) {
-            user.Register();
+            login.Register();
         } else {
             System.out.println("User is already logged in. Logout first.");
         }
     }
 
-    public void LoginUser() throws IOException {
+    // @Override
+    public void loginUser() throws IOException {
         if (!isUserLogin) {
-            if (user.CheckCredentials()) {
+            if (login.CheckCredentials()) {
                 isUserLogin = true;
                 System.out.println("User Login Successful!");
             } else {
@@ -118,9 +125,10 @@ public class Portfolio extends Website implements Runnable {
         }
     }
 
-    public void LogoutUser(String name) throws IOException{
+    public void logoutUser(String name) throws IOException {
+        super.logoutUser(name);
         if (isUserLogin) {
-            user.logoutUser(name);
+            login.logoutUser(name);
             isUserLogin = false;
             System.out.println("User Logout Successful!");
         } else {
@@ -128,10 +136,10 @@ public class Portfolio extends Website implements Runnable {
         }
     }
 
-    public void SetAdminLogin(boolean isAdmin) {
-        if (!isUserLogin) {
-            user.setIsAdmin(isAdmin);
-            if (user.getIsAdmin()) {
+    public void setAdminLogin(boolean isAdmin) {
+        if (isAdmin) {
+            login.setIsAdmin(isAdmin);
+            if (login.getIsAdmin()) {
                 System.out.println("Admin Login Set!");
             } else {
                 System.out.println("Admin Login Removed!");
@@ -140,84 +148,32 @@ public class Portfolio extends Website implements Runnable {
             System.out.println("User is currently logged in. Cannot set admin login.");
         }
     }
-    public void writeArticles(String ArticleTitle) throws IOException {
+
+    public void deleteArticle(String articleTitle) {
         // Check if the user is an admin
-        if (user.getIsAdmin()) {
-            // Create a file for the article
-            File articleFile = new File(ArticleTitle + ".txt");
-            // Check if the file already exists
+        if (login.getIsAdmin()) {
+            // Create a File object for the article
+            File articleFile = new File(articleTitle + ".txt");
+
+            // Check if the article file exists
             if (articleFile.exists()) {
-                System.out.println("Article with the same title already exists. Please choose a different title.");
-                return; // Exit the method
-            }
-    
-            articleFile.createNewFile();
-            String article = "";
-            FileWriter write = new FileWriter(articleFile);
-            
-            // Use a Scanner to read user input
-            Scanner userInputScanner = new Scanner(System.in);
-            System.out.println("Enter the content of the article (press Enter on an empty line to finish):");
-    
-            while (true) {
-                String userInput = userInputScanner.nextLine();
-                if (userInput.isEmpty()) {
-                    break; // Exit the loop when the user presses Enter
+                // Delete the article file
+                if (articleFile.delete()) {
+                    System.out.println("Article '" + articleTitle + "' has been deleted.");
                 } else {
-                    article += userInput + "\n"; // Append the input to the article content
+                    System.out.println("Failed to delete the article.");
                 }
-            }
-    
-            // Write the article content to the file
-            write.write(article);
-            write.close();
-            
-    
-            System.out.println("Article published successfully.");
-        } else {
-            System.out.println("Only admin can write articles!");
-        }
-    }
-public void deleteArticle(String articleTitle) {
-    // Check if the user is an admin
-    if (user.getIsAdmin()) {
-        // Create a File object for the article
-        File articleFile = new File(articleTitle + ".txt");
-
-        // Check if the article file exists
-        if (articleFile.exists()) {
-            // Delete the article file
-            if (articleFile.delete()) {
-                System.out.println("Article '" + articleTitle + "' has been deleted.");
             } else {
-                System.out.println("Failed to delete the article.");
+                System.out.println("Article not found.");
             }
         } else {
-            System.out.println("Article not found.");
+            System.out.println("Only admin can delete articles!");
         }
-    } else {
-        System.out.println("Only admin can delete articles!");
     }
-}
-
-@Override
-public void run() {
-    try {
-        System.out.println("thread is starting its task.");
-        // Perform some task
-        for (int i = 0; i < 5; i++) {
-            System.out.println(" someone is working: " + i);
-            try {
-                LoginUser();
-                Thread.sleep(1000); // Simulate some work
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("someone has completed its task.");
-    } catch (IOException e) {
-        e.printStackTrace();
+    public void writeArticle(String articleTitle,boolean isAdmin) throws IOException {
+        ArticleThread articleThread = new ArticleThread(articleTitle,isAdmin);
+        articleThread.start();
     }
+    
+   
 }
-}
-

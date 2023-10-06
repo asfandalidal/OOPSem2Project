@@ -1,18 +1,10 @@
-
-Name: Abdul Wali
-Email Address: AbdulWali@yahoo.com
-DOB: 20 Sept 2005
-Payment Method: COD
-Phone number: 0202335
-Password: 321
-Name: Asfand Dal
+Name: Asfand Ali Dal
 Email Address: asfand.azeemi@gmail.com
 DOB: 26 August 2003
-Payment Method: COD
 Phone number: 03023246164
-Password: 321
-Name: Aijaz
-Email Address: AijazBM@hotmail.com
-DOB: 3 October 2001
-Phone number: 0321785563
-Password: 963
+Password: 0020
+Name: Abdul Wali
+Email Address: AbdulWali@gmail.com
+DOB: 20 Sept 2005
+Phone number: 03214879335
+Password: null

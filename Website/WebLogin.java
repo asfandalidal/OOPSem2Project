@@ -1,3 +1,4 @@
+import java.io.Console;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -20,23 +21,23 @@ public class WebLogin {
     }
 
     public void Register() throws IOException {
+        Console con=System.console();
+        char [] p;
         System.out.print("Enter your name: ");
         name = sc.nextLine();
         System.out.print("Enter your Email Address: ");
         emailAddress = sc.nextLine();
         System.out.print("Enter your DOB: ");
         DOB = sc.nextLine();
-        // System.out.print("Enter your payment method for shipping: ");
-        // paymentinfo = sc.nextLine();
         System.out.print("Enter your phone No: ");
         phoneNo = sc.nextLine();
         System.out.print("Enter password: ");
-        password = sc.nextLine();
+         p=con.readPassword();
+        String pass=new String(p);
         FileWriter fin = new FileWriter(file, true);
         fin.write("Name: " + name + "\n");
         fin.write("Email Address: " + emailAddress + "\n");
         fin.write("DOB: " + DOB + "\n");
-        // fin.write("Payment Method: " + paymentinfo + "\n");
         fin.write("Phone number: " + phoneNo + "\n");
         fin.write("Password: " + password + "\n");
         System.out.println("Sign Up Successfull!");
@@ -44,26 +45,27 @@ public class WebLogin {
     }
 
     public boolean CheckCredentials() throws IOException {
+        Console con=System.console();
         FileReader fout = new FileReader(file);
         String findn = "";
         String e;
-        String p;
+        char [] p;
         int i;
         boolean found = false;
         System.out.print("Enter your Email Address: ");
         e = sc.nextLine();
         System.out.print("Enter your password: ");
-        p = sc.nextLine();
+        p=con.readPassword();
+        String pass=new String(p);
         while ((i = fout.read()) != -1) {
             findn += (char) i;
         }
-        if (findn.contains(e) && findn.contains(p)) {
+        if (findn.contains(e) && findn.contains(pass)) {
             found = true;
         } else {
         }
         return found;
     }
-
     public void logoutUser(String name) throws IOException {
         FileReader fout = new FileReader(file);
         String findn = "";

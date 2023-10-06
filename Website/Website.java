@@ -11,7 +11,6 @@ public class Website {
     private boolean CMS;
     private String creationDate;
     private ArrayList<WebPage> pages;
-    // private ArrayList<USERTEST> users;
     private String webServerTechnology;
     private String FrontEndFramework;
     private String FrontendLanguage;
@@ -20,12 +19,9 @@ public class Website {
     private boolean IsWebsiteActive;
     private String HostingProvider;
     private String DomainRegistrar;
-    private ArrayList<String> WebsiteCategories;
     private ArrayList<String> SocialMediaLinks;
     private ArrayList<String> LanguageSupported;
-    // private USERTEST user;
-    private WebLogin login;
-
+    protected WebLogin login; // association
     public Website(String Name, String URL, String Description, String domainName,
                    String dataBaseTechnology, boolean CMS,String creationDate,
                    String webServerTechnology, String FrontEndFramework, String FrontendLanguage,
@@ -39,7 +35,6 @@ public class Website {
         this.CMS = CMS;
         this.creationDate = creationDate;
         this.pages = new ArrayList<>();
-        // this.users = new ArrayList<>();
         this.webServerTechnology = webServerTechnology;
         this.FrontEndFramework = FrontEndFramework;
         this.FrontendLanguage = FrontendLanguage;
@@ -48,7 +43,6 @@ public class Website {
         this.IsWebsiteActive = IsWebsiteActive;
         this.HostingProvider = HostingProvider;
         this.DomainRegistrar = DomainRegistrar;
-        this.WebsiteCategories = new ArrayList<>();
         this.SocialMediaLinks = new ArrayList<>();
         this.LanguageSupported = new ArrayList<>();
         this.login=new WebLogin();
@@ -149,11 +143,10 @@ public class Website {
     public void registerUser() throws IOException {
         login.Register();
     }
-    public void Login() throws IOException
+    public void LoginUser() throws IOException
     {   
         login.CheckCredentials();
     }
-    
     public void logoutUser(String uname) throws IOException {
         login.logoutUser(uname);
     }
